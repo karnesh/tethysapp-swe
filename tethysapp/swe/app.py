@@ -1,4 +1,5 @@
 from tethys_sdk.base import TethysAppBase, url_map_maker
+from tethys_sdk.app_settings import SpatialDatasetServiceSetting
 
 
 class Swe(TethysAppBase):
@@ -17,6 +18,8 @@ class Swe(TethysAppBase):
     enable_feedback = False
     feedback_emails = []
 
+    THREDDS_SERVICE_NAME = 'thredds_service'
+
     def url_maps(self):
         """
         Add controllers
@@ -32,3 +35,18 @@ class Swe(TethysAppBase):
         )
 
         return url_maps
+
+    def spatial_dataset_service_settings(self):
+        """
+        Spatial Dataset service settings method
+        """
+        sds_settings = (
+            SpatialDatasetServiceSetting(
+                name=self.THREDDS_SERVICE_NAME,
+                description='THREDDS service for app to use',
+                engine=SpatialDatasetServiceSetting.THREDDS,
+                required=True,
+            ),
+        )
+
+        return sds_settings
