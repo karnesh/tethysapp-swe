@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import SelectInput
+from .app import Swe as app
+from .thredds_methods import parse_datasets
 
 
 @login_required()
@@ -8,15 +10,22 @@ def home(request):
     """
     Controller for the app home page.
     """
+    catalog = app.get_spatial_dataset_service(app.THREDDS_SERVICE_NAME, as_engine=True)
+
     # Retrieve dataset options from the THREDDS service
-    datasets = []
+    print("Retrieving Datasets...")
+    datasets = parse_datasets(catalog)
+    initial_dataset_option = datasets[0]
+    from pprint import pprint
+    pprint(datasets)
+    pprint(initial_dataset_option)
 
     dataset_select = SelectInput(
         display_text='Dataset',
         name='dataset',
         multiple=False,
         options=datasets,
-        initial=None,
+        initial=initial_dataset_option,
         select2_options={'placeholder': 'Select a dataset',
                          'allowClear': False}
     )
