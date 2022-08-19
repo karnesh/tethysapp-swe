@@ -56,3 +56,27 @@ def home(request):
     }
 
     return render(request, 'swe/home.html', context)
+
+
+@login_required()
+def get_wms_layers(request):
+    json_response = {'success': False}
+
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+
+    try:
+        wms_url = request.GET.get('wms_url', None)
+
+        print(f'Retrieving layers for: {wms_url}')
+        layers = get_layers_for_wms(wms_url)
+
+        json_response.update({
+            'success': True,
+            'layers': layers
+        })
+
+    except Exception:
+        json_response['error'] = f'An unexpected error has occurred. Please try again.'
+
+    return JsonResponse(json_response)
