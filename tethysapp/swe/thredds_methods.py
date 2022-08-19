@@ -1,3 +1,6 @@
+from owslib.wms import WebMapService
+
+
 def parse_datasets(catalog):
     """
     Collect all available datasets that have the WMS service enabled.
@@ -20,3 +23,37 @@ def parse_datasets(catalog):
         datasets.extend(d)
 
     return datasets
+
+
+def get_layers_for_wms(wms_url):
+    """
+    Retrieve metadata from a WMS service including layers, available styles, and the bounding box.
+
+    Args:
+        wms_url(str): URL to the WMS service endpoint.
+
+    Returns:
+        dict<layer_name:dict<styles,bbox>>: A dictionary with a key for each WMS layer available and a dictionary value containing metadata about the layer.
+    """
+    wms = WebMapService(wms_url)
+    layers = wms.contents
+    from pprint import pprint
+    print('WMS Contents:')
+    pprint(layers)
+
+    layers_dict = dict()
+    for layer_name, layer in layers.items():
+        layer_styles = layer.styles
+        layer_bbox = layer.boundingBoxWGS84
+        leaflet_bbox = [[layer_bbox[1], layer_bbox[0]], [layer_bbox[3], layer_bbox[2]]]
+        layers_dict.update({
+            layer_name: {
+                'styles': layer_styles,
+                'bbox': leaflet_bbox
+            }
+        })
+
+    print('Layers Dict:')
+    pprint(layers_dict)
+    return layers_dict
+
