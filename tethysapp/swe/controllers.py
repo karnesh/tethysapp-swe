@@ -2,7 +2,8 @@ from django.shortcuts import render
 from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import SelectInput
 from .app import Swe as app
-from .thredds_methods import parse_datasets
+from .thredds_methods import parse_datasets, get_layers_for_wms
+from django.http import HttpResponseNotAllowed, JsonResponse
 
 
 @login_required()
