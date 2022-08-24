@@ -32,6 +32,11 @@ class Swe(TethysAppBase):
                 url='swe',
                 controller='swe.controllers.home'
             ),
+            UrlMap(
+                name='get-wms-layers',
+                url='swe/get-wms-layers',
+                controller='swe.controllers.get_wms_layers'
+            ),
         )
 
         return url_maps
