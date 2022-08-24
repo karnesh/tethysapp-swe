@@ -15,11 +15,20 @@ var LEAFLET_MAP = (function() {
     *************************************************************************/
     var public_interface,                           // Object returned by the module
         m_map;                                              // The Leaflet Map
+    var m_layer_meta,        // Map of layer metadata indexed by variable
+        m_curr_dataset,      // The current selected dataset
+        m_curr_variable,     // The current selected variable/layer
+        m_curr_style,        // The current selected style
+        m_curr_wms_url;      // The current WMS url
+
     /************************************************************************
     *                    PRIVATE FUNCTION DECLARATIONS
     *************************************************************************/
     // Map Methods
     var init_map;
+    // Control Methods
+    var init_controls, update_variable_control, update_style_control;
+
 
     /************************************************************************
     *                    PRIVATE FUNCTION IMPLEMENTATIONS
