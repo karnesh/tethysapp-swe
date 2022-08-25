@@ -48,6 +48,21 @@ var LEAFLET_MAP = (function() {
         }).addTo(m_map);
     };
 
+    // Control Methods
+    init_controls = function() {
+        console.log('Initializing controls...');
+    };
+
+    // Query the current WMS for available layers and add them to the variable control
+    update_variable_control = function() {
+        console.log('Updating variable control...');
+    };
+
+    // Update the available style options on the style control
+    update_style_control = function() {
+        console.log('Updating style control...');
+    };
+
     /************************************************************************
     *                        DEFINE PUBLIC INTERFACE
     *************************************************************************/
@@ -68,6 +83,7 @@ var LEAFLET_MAP = (function() {
     // the DOM tree finishes loading
     $(function() {
         init_map();
+        init_controls();
     });
 
     return public_interface;
