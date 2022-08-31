@@ -117,7 +117,18 @@ var LEAFLET_MAP = (function() {
 
     // Update the available style options on the style control
     update_style_control = function() {
-        console.log('Updating style control...');
+        let first_option = true;
+        for (var style in m_layer_meta[m_curr_variable].styles) {
+            if (first_option) {
+                m_curr_style = style;
+            }
+
+            let new_option = new Option(style, style, first_option, first_option);
+            $('#style').append(new_option);
+            first_option = false;
+        }
+
+        $('#style').trigger('change');
     };
 
     /************************************************************************
