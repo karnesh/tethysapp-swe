@@ -50,7 +50,31 @@ var LEAFLET_MAP = (function() {
 
     // Control Methods
     init_controls = function() {
-        console.log('Initializing controls...');
+        // Define what happens when the dataset select input changes
+        $('#dataset').on('change', function() {
+            let dataset_wms = $('#dataset').val();
+            let dataset_wms_parts = dataset_wms.split(';');
+            m_curr_dataset = dataset_wms_parts[0];
+            m_curr_wms_url = dataset_wms_parts[1];
+
+            // Update variable control with layers provided by the new WMS
+            update_variable_control();
+        });
+
+        // Define what happens when the variable select input changes
+        $('#variable').on('change', function() {
+            m_curr_variable = $('#variable').val();
+
+            // Update the styles
+            update_style_control();
+        });
+
+        // Define what happens when the style select input changes
+        $('#style').on('change', function() {
+            m_curr_style = $('#style').val();
+        });
+
+        $('#dataset').trigger('change');
     };
 
     // Query the current WMS for available layers and add them to the variable control
