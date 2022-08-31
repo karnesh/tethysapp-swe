@@ -79,7 +79,40 @@ var LEAFLET_MAP = (function() {
 
     // Query the current WMS for available layers and add them to the variable control
     update_variable_control = function() {
-        console.log('Updating variable control...');
+        // Use AJAX endpoint to get WMS layers
+        $.ajax({
+            url: './get-wms-layers/',
+            method: 'GET',
+            data: {
+                'wms_url': m_curr_wms_url
+            }
+        }).done(function(data) {
+            if (!data.success) {
+                console.log('An unexpected error occurred!');
+                return;
+            }
+
+            // Clear current variable select options
+            $('#variable').select2().empty();
+
+            // Save layer metadata
+            m_layer_meta = data.layers;
+
+            // Create new variable select options
+            let first_option = true;
+            for (var layer in data.layers) {
+                if (first_option) {
+                    m_curr_variable = layer;
+                }
+
+                let new_option = new Option(layer, layer, first_option, first_option);
+                $('#variable').append(new_option);
+                first_option = false;
+            }
+
+            // Trigger a change to refresh the select box
+            $('#variable').trigger('change');
+        });
     };
 
     // Update the available style options on the style control
