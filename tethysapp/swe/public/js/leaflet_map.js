@@ -40,6 +40,8 @@ var LEAFLET_MAP = (function() {
             zoom: 4,
             center: [37.8, -96],
             fullscreenControl: true,
+            timeDimension: true,
+            timeDimensionControl: true
         });
 
         // Add Basemap
