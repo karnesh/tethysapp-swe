@@ -37,8 +37,8 @@ var LEAFLET_MAP = (function() {
     init_map = function() {
         // Create Map
         m_map = L.map('leaflet-map', {
-            zoom: 3,
-            center: [0, 0],
+            zoom: 4,
+            center: [37.8, -96],
             fullscreenControl: true,
         });
 
