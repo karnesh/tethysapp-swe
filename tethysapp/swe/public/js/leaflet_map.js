@@ -104,6 +104,9 @@ var LEAFLET_MAP = (function() {
         // Define what happens when the style select input changes
         $('#style').on('change', function() {
             m_curr_style = $('#style').val();
+
+            // Update the layer with new styles
+            update_layer()
         });
 
         $('#dataset').trigger('change');
