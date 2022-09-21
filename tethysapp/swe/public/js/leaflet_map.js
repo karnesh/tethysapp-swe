@@ -20,6 +20,8 @@ var LEAFLET_MAP = (function() {
         m_curr_variable,     // The current selected variable/layer
         m_curr_style,        // The current selected style
         m_curr_wms_url;      // The current WMS url
+    var m_layer,             // The layer
+        m_td_layer;          // The Time-Dimension layer
 
     /************************************************************************
     *                    PRIVATE FUNCTION DECLARATIONS
@@ -28,6 +30,7 @@ var LEAFLET_MAP = (function() {
     var init_map;
     // Control Methods
     var init_controls, update_variable_control, update_style_control;
+    var update_layer;
 
 
     /************************************************************************
@@ -49,6 +52,33 @@ var LEAFLET_MAP = (function() {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(m_map);
     };
+
+    update_layer = function() {
+        if (m_td_layer) {
+            m_map.removeLayer(m_td_layer);
+        }
+
+        // Layer
+        m_layer = L.tileLayer.wms(m_curr_wms_url, {
+            layers: m_curr_variable,
+            format: 'image/png',
+            transparent: true,
+            colorscalerange: '250,350',  // Hard-coded color scale range won't work for all layers
+            abovemaxcolor: "extend",
+            belowmincolor: "extend",
+            numcolorbands: 100,
+            styles: m_curr_style
+        });
+
+        // Wrap WMS layer in Time Dimension Layer
+        m_td_layer = L.timeDimension.layer.wms(m_layer, {
+            updateTimeDimension: true
+        });
+
+        // Add Time-Dimension-Wrapped WMS layer to the Map
+        m_td_layer.addTo(m_map);
+    };
+
 
     // Control Methods
     init_controls = function() {
