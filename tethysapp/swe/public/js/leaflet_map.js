@@ -99,6 +99,10 @@ var LEAFLET_MAP = (function() {
 
             // Update the styles
             update_style_control();
+
+            // Zoom to the bounding box of the new layer
+            let bbox = m_layer_meta[m_curr_variable].bbox;
+            m_map.fitBounds(bbox);
         });
 
         // Define what happens when the style select input changes
