@@ -41,7 +41,7 @@ var LEAFLET_MAP = (function() {
         // Create Map
         m_map = L.map('leaflet-map', {
             zoom: 4,
-            center: [37.8, -96],
+            center: [0, 0],
             fullscreenControl: true,
             timeDimension: true,
             timeDimensionControl: true
