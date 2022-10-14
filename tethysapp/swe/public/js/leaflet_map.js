@@ -63,7 +63,7 @@ var LEAFLET_MAP = (function() {
             layers: m_curr_variable,
             format: 'image/png',
             transparent: true,
-            //colorscalerange: '1,100',  // Hard-coded color scale range won't work for all layers
+            //colorscalerange: '0,100',  // Hard-coded color scale range won't work for all layers
             //abovemaxcolor: "extend",
             //belowmincolor: "extend",
             numcolorbands: 100,
