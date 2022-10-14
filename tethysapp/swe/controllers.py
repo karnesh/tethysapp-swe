@@ -44,7 +44,8 @@ def home(request):
         display_text='Style',
         name='style',
         multiple=False,
-        options=(),
+        options=[('Contour', 'contour'), ('Rainbow', 'boxfill/rainbow'), ('Occam', 'boxfill/occam')],
+        #options=(),
         select2_options={'placeholder': 'Select a style',
                          'allowClear': False}
     )
