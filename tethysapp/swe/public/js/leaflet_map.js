@@ -99,7 +99,7 @@ var LEAFLET_MAP = (function() {
             m_curr_variable = $('#variable').val();
 
             // Update the styles
-            update_style_control();
+            // update_style_control();
 
             // Zoom to the bounding box of the new layer
             let bbox = m_layer_meta[m_curr_variable].bbox;
