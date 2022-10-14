@@ -44,7 +44,7 @@ var LEAFLET_MAP = (function() {
             center: [0, 0],
             fullscreenControl: true,
             timeDimension: true,
-            timeDimensionControl: true
+            timeDimensionControl: false
         });
 
         // Add Basemap
@@ -63,11 +63,12 @@ var LEAFLET_MAP = (function() {
             layers: m_curr_variable,
             format: 'image/png',
             transparent: true,
-            colorscalerange: '250,350',  // Hard-coded color scale range won't work for all layers
-            abovemaxcolor: "extend",
-            belowmincolor: "extend",
+            //colorscalerange: '1,100',  // Hard-coded color scale range won't work for all layers
+            //abovemaxcolor: "extend",
+            //belowmincolor: "extend",
             numcolorbands: 100,
             styles: m_curr_style
+            //styles: "contour"
         });
 
         // Wrap WMS layer in Time Dimension Layer
@@ -98,7 +99,7 @@ var LEAFLET_MAP = (function() {
             m_curr_variable = $('#variable').val();
 
             // Update the styles
-            update_style_control();
+            //update_style_control();
 
             // Zoom to the bounding box of the new layer
             let bbox = m_layer_meta[m_curr_variable].bbox;
