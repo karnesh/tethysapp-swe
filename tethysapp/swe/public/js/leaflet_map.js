@@ -31,7 +31,8 @@ var LEAFLET_MAP = (function() {
     // Control Methods
     var init_controls, update_variable_control, update_style_control;
     var update_layer;
-
+    // Legend Methods
+    var update_legend, clear_legend;
 
     /************************************************************************
     *                    PRIVATE FUNCTION IMPLEMENTATIONS
@@ -169,6 +170,12 @@ var LEAFLET_MAP = (function() {
         }
 
         $('#style').trigger('change');
+    };
+
+    // Legend Methods
+    update_legend = function() {
+        let legend = m_layer_meta[m_curr_variable].styles[m_curr_style].legend;
+        $('#legend').html('<li class="title">Legend<h1></li><img src="' + legend + '">');
     };
 
     /************************************************************************
