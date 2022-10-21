@@ -178,6 +178,11 @@ var LEAFLET_MAP = (function() {
         $('#legend').html('<li class="title">Legend<h1></li><img src="' + legend + '">');
     };
 
+    clear_legend = function() {
+        $('#legend').html('');
+    };
+
+
     /************************************************************************
     *                        DEFINE PUBLIC INTERFACE
     *************************************************************************/
