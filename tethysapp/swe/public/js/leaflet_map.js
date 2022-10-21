@@ -59,6 +59,9 @@ var LEAFLET_MAP = (function() {
             m_map.removeLayer(m_td_layer);
         }
 
+        // Clear legend
+        clear_legend();
+
         // Layer
         m_layer = L.tileLayer.wms(m_curr_wms_url, {
             layers: m_curr_variable,
@@ -79,6 +82,9 @@ var LEAFLET_MAP = (function() {
 
         // Add Time-Dimension-Wrapped WMS layer to the Map
         m_td_layer.addTo(m_map);
+
+        // Update the Legend Graphic
+        update_legend();
     };
 
 
