@@ -49,8 +49,13 @@ var LEAFLET_MAP = (function() {
         });
 
         // Add Basemap
+        /*
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(m_map);
+        */
+        L.tileLayer("https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg",{
+            attribution: ""
         }).addTo(m_map);
     };
 
