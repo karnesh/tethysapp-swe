@@ -1,1 +1,1 @@
-# National Snow Model Visualization Tethys App
+# National Snow Model Tethys App
