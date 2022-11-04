@@ -9,7 +9,7 @@ class Swe(TethysAppBase):
 
     name = 'SWE'
     index = 'swe:home'
-    icon = 'swe/images/icon.gif'
+    icon = 'swe/images/Superior.jpg'
     package = 'swe'
     root_url = 'swe'
     color = '#8e44ad'
