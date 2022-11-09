@@ -29,6 +29,12 @@
   <div id="leaflet-map"></div>
 {% endblock %}
 
+{% block after_app_content %}
+  <div id="loader">
+    <img src="{% static 'thredds_tutorial/images/map-loader.gif' %}">
+  </div>
+{% endblock %}
+
 {% block app_navigation_items %}
   <li class="title">Query</li>
   {% gizmo dataset_select %}
