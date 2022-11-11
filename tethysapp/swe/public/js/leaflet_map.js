@@ -142,6 +142,8 @@ var LEAFLET_MAP = (function() {
 
     // Query the current WMS for available layers and add them to the variable control
     update_variable_control = function() {
+        // show loader
+        show_loader();
         // Use AJAX endpoint to get WMS layers
         $.ajax({
             url: './get-wms-layers/',
@@ -175,6 +177,9 @@ var LEAFLET_MAP = (function() {
 
             // Trigger a change to refresh the select box
             $('#variable').trigger('change');
+
+            // hide loader
+            hide_loader();
         });
     };
 
