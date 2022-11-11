@@ -33,6 +33,8 @@ var LEAFLET_MAP = (function() {
     var update_layer;
     // Legend Methods
     var update_legend, clear_legend;
+    // Loader Methods
+    var show_loader, hide_loader;
 
     /************************************************************************
     *                    PRIVATE FUNCTION IMPLEMENTATIONS
@@ -83,6 +85,15 @@ var LEAFLET_MAP = (function() {
         // Wrap WMS layer in Time Dimension Layer
         m_td_layer = L.timeDimension.layer.wms(m_layer, {
             updateTimeDimension: true
+        });
+
+        // Add events for loading
+        m_layer.on('loading', function(){
+            show_loader();
+        });
+
+        m_layer.on('load', function(){
+            hide_loader();
         });
 
         // Add Time-Dimension-Wrapped WMS layer to the Map
@@ -193,6 +204,14 @@ var LEAFLET_MAP = (function() {
         $('#legend').html('');
     };
 
+    // Loader Methods
+    show_loader = function() {
+        $('#loader').addClass('show');
+    };
+
+    hide_loader = function() {
+        $('#loader').removeClass('show');
+    };
 
     /************************************************************************
     *                        DEFINE PUBLIC INTERFACE
