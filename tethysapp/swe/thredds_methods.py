@@ -1,4 +1,7 @@
 from owslib.wms import WebMapService
+import logging
+
+log = logging.getLogger(__name__)
 
 
 def parse_datasets(catalog):
@@ -37,9 +40,8 @@ def get_layers_for_wms(wms_url):
     """
     wms = WebMapService(wms_url)
     layers = wms.contents
-    from pprint import pprint
-    print('WMS Contents:')
-    pprint(layers)
+    log.debug('WMS Contents:')
+    log.debug(layers)
 
     layers_dict = dict()
     for layer_name, layer in layers.items():
@@ -53,7 +55,7 @@ def get_layers_for_wms(wms_url):
             }
         })
 
-    print('Layers Dict:')
-    pprint(layers_dict)
+    log.debug('Layers Dict:')
+    log.debug(layers_dict)
     return layers_dict
 
