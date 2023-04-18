@@ -17,29 +17,9 @@ class Swe(TethysAppBase):
     tags = ''
     enable_feedback = False
     feedback_emails = []
-
+    controller_modules = [ 'controllers' ]
     THREDDS_SERVICE_NAME = 'thredds_service'
 
-    def url_maps(self):
-        """
-        Add controllers
-        """
-        UrlMap = url_map_maker(self.root_url)
-
-        url_maps = (
-            UrlMap(
-                name='home',
-                url='swe',
-                controller='swe.controllers.home'
-            ),
-            UrlMap(
-                name='get_wms_layers',
-                url='swe/get-wms-layers',
-                controller='swe.controllers.get_wms_layers'
-            ),
-        )
-
-        return url_maps
 
     def spatial_dataset_service_settings(self):
         """

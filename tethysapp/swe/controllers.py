@@ -9,7 +9,9 @@ import logging
 log = logging.getLogger(__name__)
 
 
-@login_required()
+
+
+@controller(name='home',url='swe')
 def home(request):
     """
     Controller for the app home page.
@@ -61,7 +63,7 @@ def home(request):
     return render(request, 'swe/home.html', context)
 
 
-@login_required()
+@controller(name='get_wms_layers',url='swe/get-wms-layers')
 def get_wms_layers(request):
     json_response = {'success': False}
 
