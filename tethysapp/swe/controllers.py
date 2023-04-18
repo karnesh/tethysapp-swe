@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from tethys_sdk.permissions import login_required
+from tethys_sdk.routing import controller
 from tethys_sdk.gizmos import SelectInput
 from .app import Swe as app
 from .thredds_methods import parse_datasets, get_layers_for_wms
