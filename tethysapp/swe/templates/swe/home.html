@@ -7,8 +7,8 @@
    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
    crossorigin=""/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.min.css" />
-  <link rel="stylesheet" href="{% static 'thredds_tutorial/css/leaflet_map.css' %}"/>
-  <link rel="stylesheet" href="{% static 'thredds_tutorial/css/loader.css' %}" />
+  <link rel="stylesheet" href="{% static 'swe/css/leaflet_map.css' %}"/>
+  <link rel="stylesheet" href="{% static 'swe/css/loader.css' %}" />
 {% endblock %}
 
 {% block global_scripts %}
@@ -31,7 +31,7 @@
 
 {% block after_app_content %}
   <div id="loader">
-    <img src="{% static 'thredds_tutorial/images/map-loader.gif' %}">
+    <img src="{% static 'swe/images/map-loader.gif' %}">
   </div>
 {% endblock %}
 

@@ -30,7 +30,7 @@ class Swe(TethysAppBase):
                 name=self.THREDDS_SERVICE_NAME,
                 description='THREDDS service for app to use',
                 engine=SpatialDatasetServiceSetting.THREDDS,
-                required=True,
+                required=False,
             ),
         )
 
