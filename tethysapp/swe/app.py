@@ -8,7 +8,7 @@ class Swe(TethysAppBase):
     """
 
     name = 'SWE'
-    index = 'swe:home'
+    index = 'home'
     icon = 'swe/images/Superior.jpg'
     package = 'swe'
     root_url = 'swe'
