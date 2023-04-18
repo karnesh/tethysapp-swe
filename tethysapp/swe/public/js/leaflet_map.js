@@ -153,8 +153,11 @@ var LEAFLET_MAP = (function() {
             }
         }).done(function(data) {
             if (!data.success) {
+                
                 console.log('An unexpected error occurred!');
+                hide_loader();
                 return;
+                
             }
 
             // Clear current variable select options
