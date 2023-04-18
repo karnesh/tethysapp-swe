@@ -49,6 +49,8 @@ def home(request):
         name='style',
         multiple=False,
         options=[('RedBlue', 'boxfill/redblue'), ('Rainbow', 'boxfill/rainbow'), ('Occam', 'boxfill/occam'), ('Ferret', 'boxfill/ferret')],
+        # options=[('RedBlue', 'raster/default'), ('seq-Purples', 'raster/seq-BlueHeat'), ('div-RdGy', 'raster/div-RdGy'), ('seq-BkRd', 'raster/seq-BkRd')],
+  
         #options=(),
         select2_options={'placeholder': 'Select a style',
                          'allowClear': False}
@@ -82,6 +84,7 @@ def get_wms_layers(request):
         })
 
     except Exception:
+        log.exception("error")
         json_response['error'] = f'An unexpected error has occurred. Please try again.'
 
     return JsonResponse(json_response)
