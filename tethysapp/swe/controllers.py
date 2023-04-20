@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from tethys_sdk.permissions import login_required
+from tethys_sdk.routing import controller
 from tethys_sdk.gizmos import SelectInput
 from .app import Swe as app
 from .thredds_methods import parse_datasets, get_layers_for_wms
@@ -9,7 +9,9 @@ import logging
 log = logging.getLogger(__name__)
 
 
-@login_required()
+
+
+@controller(name='home',url='swe')
 def home(request):
     """
     Controller for the app home page.
@@ -47,6 +49,8 @@ def home(request):
         name='style',
         multiple=False,
         options=[('RedBlue', 'boxfill/redblue'), ('Rainbow', 'boxfill/rainbow'), ('Occam', 'boxfill/occam'), ('Ferret', 'boxfill/ferret')],
+        # options=[('RedBlue', 'raster/default'), ('seq-Purples', 'raster/seq-BlueHeat'), ('div-RdGy', 'raster/div-RdGy'), ('seq-BkRd', 'raster/seq-BkRd')],
+  
         #options=(),
         select2_options={'placeholder': 'Select a style',
                          'allowClear': False}
@@ -61,7 +65,7 @@ def home(request):
     return render(request, 'swe/home.html', context)
 
 
-@login_required()
+@controller(name='get_wms_layers',url='swe/get-wms-layers')
 def get_wms_layers(request):
     json_response = {'success': False}
 
@@ -80,6 +84,7 @@ def get_wms_layers(request):
         })
 
     except Exception:
+        log.exception("error")
         json_response['error'] = f'An unexpected error has occurred. Please try again.'
 
     return JsonResponse(json_response)
