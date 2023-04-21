@@ -7,32 +7,34 @@
  *                      LIBRARY WRAPPER
  *****************************************************************************/
 
-var LEAFLET_MAP = (function() {
+ var LEAFLET_MAP = (function() {
     "use strict"; // And enable strict mode for this library
 
     /************************************************************************
     *                      MODULE LEVEL / GLOBAL VARIABLES
     *************************************************************************/
-    var public_interface,                           // Object returned by the module
-        m_map;                                              // The Leaflet Map
-    var m_layer_meta,        // Map of layer metadata indexed by variable
+    var public_interface,    // Object returned by the module
+        m_map,               // The Leaflet Map
+        m_layer,             // The layer
+        m_td_layer,          // The Time-Dimension layer
+        m_layer_meta,        // Map of layer metadata indexed by variable
         m_curr_dataset,      // The current selected dataset
         m_curr_variable,     // The current selected variable/layer
         m_curr_style,        // The current selected style
         m_curr_wms_url;      // The current WMS url
-    var m_layer,             // The layer
-        m_td_layer;          // The Time-Dimension layer
 
     /************************************************************************
     *                    PRIVATE FUNCTION DECLARATIONS
     *************************************************************************/
     // Map Methods
-    var init_map;
+    var init_map, update_layer;
+
     // Control Methods
     var init_controls, update_variable_control, update_style_control;
-    var update_layer;
+
     // Legend Methods
     var update_legend, clear_legend;
+
     // Loader Methods
     var show_loader, hide_loader;
 
@@ -43,19 +45,25 @@ var LEAFLET_MAP = (function() {
     init_map = function() {
         // Create Map
         m_map = L.map('leaflet-map', {
-            zoom: 4,
+            zoom: 3,
             center: [0, 0],
             fullscreenControl: true,
             timeDimension: true,
-            timeDimensionControl: false
+            timeDimensionControl: true,
+            timeDimensionControlOptions: {
+                autoPlay: true,
+                backwardButton: true,
+                forwardButton: true,
+                loopButton: true,
+                maxSpeed: 6,
+                minSpeed: 2,
+                position: "bottomleft",
+                speedStep: 1,
+                timeSliderDragUpdate: true
+            },            
         });
 
         // Add Basemap
-        /*
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(m_map);
-        */
         L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg',{
             attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
         }).addTo(m_map);
@@ -66,43 +74,43 @@ var LEAFLET_MAP = (function() {
             m_map.removeLayer(m_td_layer);
         }
 
-        // Clear legend
+        // Clear the legend
         clear_legend();
+        var proxyWMSURL = `getWMSImageFromServer?main_url=${encodeURIComponent(m_curr_wms_url)}`;
 
         // Layer
-        m_layer = L.tileLayer.wms(m_curr_wms_url, {
+        m_layer = L.tileLayer.wms(proxyWMSURL, {
             layers: m_curr_variable,
             format: 'image/png',
             transparent: true,
-            //colorscalerange: '0,100',  // Hard-coded color scale range won't work for all layers
-            //abovemaxcolor: "extend",
-            //belowmincolor: "extend",
             numcolorbands: 100,
             styles: m_curr_style
-            //styles: "contour"
         });
 
         // Wrap WMS layer in Time Dimension Layer
         m_td_layer = L.timeDimension.layer.wms(m_layer, {
-            updateTimeDimension: true
+            cacheForward: 200,
+            name: "timeDimensionLayer",
+            requestTimefromCapabilities: false,
+            updateTimeDimension: true,
+            updateTimeDimensionMode: "replace"
         });
 
         // Add events for loading
-        m_layer.on('loading', function(){
+        m_layer.on('loading', function() {
             show_loader();
         });
 
-        m_layer.on('load', function(){
+        m_layer.on('load', function() {
             hide_loader();
         });
 
         // Add Time-Dimension-Wrapped WMS layer to the Map
         m_td_layer.addTo(m_map);
 
-        // Update the Legend Graphic
+        // Update the legend graphic
         update_legend();
     };
-
 
     // Control Methods
     init_controls = function() {
@@ -122,7 +130,7 @@ var LEAFLET_MAP = (function() {
             m_curr_variable = $('#variable').val();
 
             // Update the styles
-            // update_style_control();
+            update_style_control();
 
             // Zoom to the bounding box of the new layer
             let bbox = m_layer_meta[m_curr_variable].bbox;
@@ -133,8 +141,8 @@ var LEAFLET_MAP = (function() {
         $('#style').on('change', function() {
             m_curr_style = $('#style').val();
 
-            // Update the layer with new styles
-            update_layer()
+            // Update the layer with the new styles
+            update_layer();
         });
 
         $('#dataset').trigger('change');
@@ -142,22 +150,16 @@ var LEAFLET_MAP = (function() {
 
     // Query the current WMS for available layers and add them to the variable control
     update_variable_control = function() {
-        // show loader
+        // Show loader
         show_loader();
-        // Use AJAX endpoint to get WMS layers
-        $.ajax({
-            url: './get-wms-layers/',
-            method: 'GET',
-            data: {
-                'wms_url': m_curr_wms_url
-            }
-        }).done(function(data) {
+
+        // Use REST endpoint to get WMS layers
+        fetch('./get-wms-layers/?' + new URLSearchParams({'wms_url': m_curr_wms_url}))
+          .then((response) => response.json())
+          .then((data) => {
             if (!data.success) {
-                
                 console.log('An unexpected error occurred!');
-                hide_loader();
                 return;
-                
             }
 
             // Clear current variable select options
@@ -181,9 +183,9 @@ var LEAFLET_MAP = (function() {
             // Trigger a change to refresh the select box
             $('#variable').trigger('change');
 
-            // hide loader
+            // Hide the loader
             hide_loader();
-        });
+          });
     };
 
     // Update the available style options on the style control
