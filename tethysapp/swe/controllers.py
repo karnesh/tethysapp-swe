@@ -2,16 +2,15 @@ from django.shortcuts import render
 from tethys_sdk.routing import controller
 from tethys_sdk.gizmos import SelectInput
 from .app import Swe as app
+import requests
+from django.http import HttpResponseNotAllowed, JsonResponse,HttpResponse
 from .thredds_methods import parse_datasets, get_layers_for_wms
-from django.http import HttpResponseNotAllowed, JsonResponse
 import logging
 
 log = logging.getLogger(__name__)
 
 
-
-
-@controller(name='home',url='swe')
+@controller
 def home(request):
     """
     Controller for the app home page.
@@ -31,8 +30,10 @@ def home(request):
         multiple=False,
         options=datasets,
         initial=initial_dataset_option,
-        select2_options={'placeholder': 'Select a dataset',
-                         'allowClear': False}
+        select2_options={
+            'placeholder': 'Select a dataset',
+            'allowClear': False
+        }
     )
 
     variable_select = SelectInput(
@@ -40,20 +41,21 @@ def home(request):
         name='variable',
         multiple=False,
         options=(),
-        select2_options={'placeholder': 'Select a variable',
-                         'allowClear': False}
+        select2_options={
+            'placeholder': 'Select a variable',
+            'allowClear': False
+        }
     )
 
     style_select = SelectInput(
         display_text='Style',
         name='style',
         multiple=False,
-        options=[('RedBlue', 'boxfill/redblue'), ('Rainbow', 'boxfill/rainbow'), ('Occam', 'boxfill/occam'), ('Ferret', 'boxfill/ferret')],
-        # options=[('RedBlue', 'raster/default'), ('seq-Purples', 'raster/seq-BlueHeat'), ('div-RdGy', 'raster/div-RdGy'), ('seq-BkRd', 'raster/seq-BkRd')],
-  
-        #options=(),
-        select2_options={'placeholder': 'Select a style',
-                         'allowClear': False}
+        options=(),
+        select2_options={
+            'placeholder': 'Select a style',
+            'allowClear': False
+        }
     )
 
     context = {
@@ -61,11 +63,10 @@ def home(request):
         'variable_select': variable_select,
         'style_select': style_select,
     }
-
     return render(request, 'swe/home.html', context)
 
 
-@controller(name='get_wms_layers',url='swe/get-wms-layers')
+@controller
 def get_wms_layers(request):
     json_response = {'success': False}
 
@@ -84,7 +85,21 @@ def get_wms_layers(request):
         })
 
     except Exception:
-        log.exception("error")
         json_response['error'] = f'An unexpected error has occurred. Please try again.'
 
     return JsonResponse(json_response)
+
+@controller(name='getWMSImageFromServer', url='getWMSImageFromServer/')
+def wms_image_from_server(request):
+    try:
+        if 'main_url' in request.GET:
+            request_url = request.GET.get('main_url')
+            query_params = request.GET.dict()
+            query_params.pop('main_url', None)
+            r = requests.get(request_url, params=query_params)
+            return HttpResponse(r.content, content_type="image/png")
+        else:
+            return JsonResponse({})
+    except Exception as e:
+        print(e)
+        return JsonResponse({'error': e})
